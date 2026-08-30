@@ -1,0 +1,1130 @@
+/*
+ * Nintendo.com 2001 inspired skin for the product-introduction TOP page.
+ * This is an original implementation of the visual direction described in
+ * the local design reference: brushed periwinkle, carbon command chrome,
+ * hard bevels, warm signal accents, and a dense modular grid.
+ */
+
+:root {
+  --ink: #21242e;
+  --muted: #404a66;
+  --deep: #7a8aba;
+  --navy: #21242e;
+  --panel: #dedede;
+  --panel-2: #c0d5e6;
+  --line: #5a5f8c;
+  --teal: #206479;
+  --cyan: #8ba1d4;
+  --gold: #e48600;
+  --amber: #ecab37;
+  --coral: #e60012;
+  --pink: #a7282b;
+  --ice: #c0d5e6;
+  --platinum: #dedede;
+  --white: #ffffff;
+  --chrome: #3d4f97;
+  --shadow: 7px 7px 0 rgba(33, 36, 46, .46);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body.nintendo-landing {
+  position: relative;
+  min-width: 320px;
+  color: var(--ink);
+  background:
+    linear-gradient(115deg, rgba(255,255,255,.16), transparent 24%, rgba(61,79,151,.12) 58%, transparent 84%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 1px, rgba(61,79,151,.04) 1px 3px),
+    linear-gradient(135deg, #9fbee7 0%, #7a8aba 48%, #acace7 100%);
+  font-family: Arial, "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+body.nintendo-landing::before {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(33,36,46,.035) 0 1px, transparent 1px 4px),
+    radial-gradient(circle at 20% 14%, rgba(255,255,255,.22), transparent 30%),
+    radial-gradient(circle at 80% 74%, rgba(230,0,18,.08), transparent 26%);
+  mix-blend-mode: multiply;
+  opacity: .8;
+  content: "";
+}
+
+body.nintendo-landing a { color: inherit; }
+
+body.nintendo-landing :focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 3px;
+}
+
+body.nintendo-landing .section-shell {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+body.nintendo-landing .promo-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  min-height: 62px;
+  padding: 9px max(20px, calc((100vw - 1180px) / 2));
+  color: var(--white);
+  background:
+    radial-gradient(circle, rgba(90,95,140,.36) 1px, transparent 1.3px) 0 0 / 7px 7px,
+    linear-gradient(180deg, #303442, #21242e 72%, #171a23);
+  border-bottom: 4px solid var(--gold);
+  box-shadow: 0 4px 0 rgba(33,36,46,.3), 0 11px 24px rgba(33,36,46,.2);
+  backdrop-filter: none;
+}
+
+body.nintendo-landing .brand { gap: 9px; }
+
+body.nintendo-landing .brand-mark {
+  width: 38px;
+  height: 31px;
+  color: var(--coral);
+  background: var(--white);
+  border: 2px solid var(--coral);
+  border-radius: 999px 999px 4px 4px;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.36), inset 0 -3px 0 rgba(230,0,18,.1);
+  font-family: Arial Black, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: -.1em;
+  animation: brandSignal 3.2s ease-in-out infinite;
+}
+
+body.nintendo-landing .brand strong,
+body.nintendo-landing .brand small { line-height: 1.05; }
+
+body.nintendo-landing .brand strong {
+  color: var(--white);
+  font-family: Arial Black, Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: .05em;
+}
+
+body.nintendo-landing .brand small {
+  margin-top: 4px;
+  color: #c0d5e6;
+  font-size: 8px;
+  letter-spacing: .2em;
+}
+
+body.nintendo-landing .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #c0d5e6;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+body.nintendo-landing .nav-links a:not(.nav-cta) {
+  position: relative;
+  padding: 9px 0;
+  transition: color .16s ease, transform .16s ease;
+}
+
+body.nintendo-landing .nav-links a:not(.nav-cta)::after {
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  left: 0;
+  height: 2px;
+  background: var(--amber);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .18s ease;
+  content: "";
+}
+
+body.nintendo-landing .nav-links a:not(.nav-cta):hover {
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+body.nintendo-landing .nav-links a:not(.nav-cta):hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+body.nintendo-landing .nav-cta,
+body.nintendo-landing .button-primary,
+body.nintendo-landing .sales-cta {
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+  background: linear-gradient(180deg, #f68d1f, #e48600 65%, #b76800);
+  border: 2px solid #fff1c7;
+  border-radius: 2px;
+  box-shadow: 4px 4px 0 rgba(33,36,46,.48), inset 0 1px 0 rgba(255,255,255,.6);
+  font-weight: 900;
+  text-shadow: 1px 1px 0 rgba(84,42,0,.48);
+}
+
+body.nintendo-landing .nav-cta {
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+
+body.nintendo-landing .nav-cta::after,
+body.nintendo-landing .button-primary::after,
+body.nintendo-landing .sales-cta::after {
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -70%;
+  width: 30%;
+  background: rgba(255,255,255,.42);
+  transform: skewX(-22deg);
+  transition: left .45s ease;
+  content: "";
+}
+
+body.nintendo-landing .nav-cta:hover::after,
+body.nintendo-landing .button-primary:hover::after,
+body.nintendo-landing .sales-cta:hover::after { left: 135%; }
+
+body.nintendo-landing .nav-cta:hover,
+body.nintendo-landing .button-primary:hover,
+body.nintendo-landing .sales-cta:hover {
+  transform: translate(-1px, -2px);
+  box-shadow: 6px 6px 0 rgba(33,36,46,.5), inset 0 1px 0 rgba(255,255,255,.6);
+}
+
+body.nintendo-landing .nintendo-subnav {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(180deg, #dedede, #c0d5e6 56%, #8ba1d4);
+  border-bottom: 2px solid #3d4f97;
+  box-shadow: 0 3px 0 rgba(33,36,46,.2);
+}
+
+body.nintendo-landing .subnav-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: min(1180px, calc(100% - 40px));
+  min-height: 31px;
+  margin-inline: auto;
+  color: #21242e;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+body.nintendo-landing .subnav-label {
+  color: #3d4f97;
+  white-space: nowrap;
+}
+
+body.nintendo-landing .subnav-inner nav {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  margin-left: auto;
+}
+
+body.nintendo-landing .subnav-inner nav a {
+  padding: 8px 10px;
+  border-left: 1px solid rgba(61,79,151,.36);
+  transition: color .16s ease, background .16s ease;
+}
+
+body.nintendo-landing .subnav-inner nav a:hover {
+  color: var(--white);
+  background: var(--chrome);
+}
+
+body.nintendo-landing .subnav-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--teal);
+  white-space: nowrap;
+}
+
+body.nintendo-landing .subnav-status i,
+body.nintendo-landing .pulse-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: 0 0 0 4px rgba(230,0,18,.14);
+  animation: signalPulse 1.8s ease-in-out infinite;
+}
+
+body.nintendo-landing .pulse-dot { margin-right: 7px; vertical-align: 1px; }
+
+body.nintendo-landing .hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, .88fr) minmax(500px, 1.12fr);
+  gap: 48px;
+  align-items: center;
+  min-height: 690px;
+  padding-top: 72px;
+  padding-bottom: 83px;
+}
+
+body.nintendo-landing .hero::before {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: -9vw;
+  bottom: 0;
+  left: -9vw;
+  background:
+    linear-gradient(90deg, transparent 0 12%, rgba(255,255,255,.22) 12.1% 12.25%, transparent 12.35% 87%, rgba(255,255,255,.18) 87.1% 87.25%, transparent 87.35%),
+    linear-gradient(180deg, rgba(255,255,255,.15), transparent 22%, rgba(61,79,151,.14) 100%);
+  border-bottom: 1px solid rgba(61,79,151,.52);
+  content: "";
+}
+
+body.nintendo-landing .hero::after {
+  position: absolute;
+  z-index: -1;
+  top: 34px;
+  right: -90px;
+  width: 260px;
+  height: 260px;
+  background: repeating-linear-gradient(135deg, rgba(230,0,18,.15) 0 2px, transparent 2px 11px);
+  transform: rotate(12deg);
+  opacity: .7;
+  content: "";
+}
+
+body.nintendo-landing .kicker {
+  margin: 0 0 14px;
+  color: var(--teal);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .2em;
+}
+
+body.nintendo-landing .hero-copy .kicker::after {
+  display: inline-block;
+  width: 48px;
+  height: 2px;
+  margin-left: 10px;
+  background: var(--coral);
+  vertical-align: 3px;
+  content: "";
+}
+
+body.nintendo-landing .hero h1,
+body.nintendo-landing .section-heading h2,
+body.nintendo-landing .audience-copy h2,
+body.nintendo-landing .cta-panel h2 {
+  color: var(--ink);
+  font-family: Arial Black, Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+  font-weight: 900;
+}
+
+body.nintendo-landing .hero h1 {
+  margin: 0;
+  font-size: clamp(46px, 6vw, 78px);
+  line-height: 1.02;
+  letter-spacing: -.075em;
+  text-shadow: 3px 3px 0 rgba(255,255,255,.62), 6px 6px 0 rgba(61,79,151,.36);
+}
+
+body.nintendo-landing .hero h1 em,
+body.nintendo-landing .cta-panel em {
+  color: var(--coral);
+  font-style: normal;
+  text-shadow: 2px 2px 0 rgba(255,255,255,.6), 4px 4px 0 rgba(167,40,43,.3);
+}
+
+body.nintendo-landing .hero-lead {
+  max-width: 510px;
+  margin: 26px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+body.nintendo-landing .hero-lead strong { color: var(--ink); }
+
+body.nintendo-landing .hero-actions { margin-top: 32px; }
+
+body.nintendo-landing .button {
+  min-height: 46px;
+  padding: 0 20px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 900;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+body.nintendo-landing .button-primary { color: var(--white); }
+
+body.nintendo-landing .button-ghost {
+  color: var(--ink);
+  background: linear-gradient(180deg, #ffffff, #c0d5e6);
+  border: 2px solid var(--chrome);
+  box-shadow: 4px 4px 0 rgba(33,36,46,.38), inset 0 1px 0 rgba(255,255,255,.8);
+}
+
+body.nintendo-landing .button-ghost:hover {
+  color: var(--coral);
+  background: var(--white);
+  border-color: var(--coral);
+  transform: translate(-1px, -2px);
+}
+
+body.nintendo-landing .hero-proof { gap: 7px; margin-top: 34px; }
+
+body.nintendo-landing .hero-proof span,
+body.nintendo-landing .feature-chip {
+  padding: 5px 9px;
+  color: var(--chrome);
+  background: rgba(255,255,255,.34);
+  border: 1px solid var(--chrome);
+  border-radius: 0;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .06em;
+}
+
+body.nintendo-landing .hero-visual {
+  position: relative;
+  min-height: 500px;
+  display: grid;
+  place-items: center;
+}
+
+body.nintendo-landing .hero-glow {
+  position: absolute;
+  width: 86%;
+  height: 76%;
+  background:
+    radial-gradient(ellipse at center, rgba(230,0,18,.25), transparent 38%),
+    radial-gradient(ellipse at center, rgba(255,255,255,.42), transparent 70%);
+  filter: blur(13px);
+  animation: glowShift 5s ease-in-out infinite;
+}
+
+body.nintendo-landing .mini-window {
+  position: relative;
+  z-index: 1;
+  width: min(640px, 100%);
+  padding: 8px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff, #c0d5e6 52%, #8ba1d4);
+  border: 2px solid var(--chrome);
+  border-radius: 0;
+  box-shadow: 10px 10px 0 rgba(33,36,46,.48), inset 0 0 0 2px rgba(255,255,255,.65);
+  transform: perspective(1300px) rotateY(-5deg) rotateX(3deg);
+  animation: consoleFloat 5.4s ease-in-out infinite;
+}
+
+body.nintendo-landing .mini-window::after,
+body.nintendo-landing .mock-app::after {
+  position: absolute;
+  z-index: 8;
+  top: -22%;
+  right: 0;
+  left: 0;
+  height: 18%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.16), transparent);
+  animation: scanSweep 4.8s linear infinite;
+  content: "";
+}
+
+body.nintendo-landing .mini-window-bar,
+body.nintendo-landing .mock-titlebar {
+  color: var(--ice);
+  background:
+    radial-gradient(circle, rgba(90,95,140,.35) 1px, transparent 1.3px) 0 0 / 6px 6px,
+    linear-gradient(180deg, #303442, #21242e);
+  border-bottom: 2px solid var(--gold);
+}
+
+body.nintendo-landing .mini-title,
+body.nintendo-landing .mock-titlebar strong { color: var(--white); }
+
+body.nintendo-landing .live-pill {
+  color: var(--white);
+  background: var(--coral);
+  border: 1px solid #ffb5b8;
+  border-radius: 0;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.35);
+}
+
+body.nintendo-landing .mini-toolbar {
+  background: #dedede;
+  border-color: #8ba1d4;
+}
+
+body.nintendo-landing .mini-btn,
+body.nintendo-landing .mini-select {
+  color: var(--ink);
+  background: linear-gradient(180deg, #fff, #c0d5e6);
+  border: 1px solid var(--chrome);
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 rgba(33,36,46,.25);
+}
+
+body.nintendo-landing .mini-btn.blue,
+body.nintendo-landing .mini-button.import {
+  color: var(--white);
+  background: linear-gradient(180deg, #60619c, #3d4f97);
+  border-color: #dedede;
+}
+
+body.nintendo-landing .mini-btn.teal {
+  color: var(--white);
+  background: var(--teal);
+  border-color: #d6f0f5;
+}
+
+body.nintendo-landing .mini-btn.key { color: var(--coral); }
+body.nintendo-landing .mini-btn.play { color: var(--coral); }
+body.nintendo-landing .mini-select { background: var(--white); }
+
+body.nintendo-landing .mini-chart,
+body.nintendo-landing .mini-board {
+  background: #21242e;
+  border: 1px solid #5a5f8c;
+  border-radius: 0;
+}
+
+body.nintendo-landing .mini-chart-label { color: var(--white); }
+body.nintendo-landing .mini-grid path { stroke: #5a5f8c; }
+body.nintendo-landing .mini-line { stroke: #5bd0b1; filter: drop-shadow(0 0 3px rgba(91,208,177,.6)); }
+body.nintendo-landing .mini-vwap { stroke: #8ba1d4; }
+body.nintendo-landing .mini-entry { stroke: var(--amber); }
+body.nintendo-landing .mini-entry-dot { fill: var(--coral); }
+body.nintendo-landing .mini-price-tag { fill: #5bd0b1; }
+body.nintendo-landing .mini-entry-label { fill: var(--amber); }
+body.nintendo-landing .mini-bars path { stroke: rgba(159,190,231,.42); }
+body.nintendo-landing .mini-board-head { color: #c0d5e6; }
+body.nintendo-landing .mini-row { border-color: #5a5f8c; }
+body.nintendo-landing .mini-row b { color: var(--white); }
+body.nintendo-landing .mini-row span:nth-child(2) { color: var(--amber); }
+body.nintendo-landing .mini-row.sell b { color: #ff9a9f; }
+body.nintendo-landing .mini-row.buy b { color: #87dec6; }
+body.nintendo-landing .mini-row.current { background: rgba(236,171,55,.2); border-color: var(--amber); }
+body.nintendo-landing .mini-history { color: #ff9a9f; }
+body.nintendo-landing .mini-row.history { background: rgba(167,40,43,.18); }
+body.nintendo-landing .mini-timeline { color: #c0d5e6; }
+body.nintendo-landing .mini-timeline div { background: #5a5f8c; }
+body.nintendo-landing .mini-timeline i { background: #8ba1d4; }
+body.nintendo-landing .mini-timeline i.active { background: var(--coral); box-shadow: 0 0 0 3px rgba(230,0,18,.22); }
+
+body.nintendo-landing .floating-note {
+  padding: 10px 12px 9px 36px;
+  color: var(--ink);
+  background: rgba(255,255,255,.94);
+  border: 2px solid var(--chrome);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 rgba(33,36,46,.4);
+  animation: noteFloat 4s ease-in-out infinite;
+}
+
+body.nintendo-landing .floating-note span {
+  color: var(--white);
+  background: var(--coral);
+  border-radius: 0;
+  box-shadow: 2px 2px 0 rgba(33,36,46,.32);
+}
+
+body.nintendo-landing .floating-note small { color: var(--muted); }
+body.nintendo-landing .note-bottom { border-color: var(--teal); animation-delay: -1.8s; }
+body.nintendo-landing .note-bottom span { background: var(--teal); }
+
+body.nintendo-landing .section-heading h2 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.12;
+  letter-spacing: -.06em;
+  text-shadow: 2px 2px 0 rgba(255,255,255,.52);
+}
+
+body.nintendo-landing .section-heading h2 span,
+body.nintendo-landing .audience-copy h2 span { color: var(--coral); }
+
+body.nintendo-landing .section-heading > p:last-child,
+body.nintendo-landing .audience-copy > p:not(.kicker) {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+body.nintendo-landing .feature-section,
+body.nintendo-landing .comparison-section,
+body.nintendo-landing .tour-section,
+body.nintendo-landing .flow-section,
+body.nintendo-landing .audience-section,
+body.nintendo-landing .cta-section {
+  position: relative;
+}
+
+body.nintendo-landing .feature-section::before,
+body.nintendo-landing .comparison-section::before,
+body.nintendo-landing .tour-section::before,
+body.nintendo-landing .flow-section::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--coral) 0 34px, var(--amber) 34px 68px, var(--chrome) 68px 102px, transparent 102px 136px);
+  opacity: .8;
+  content: "";
+}
+
+body.nintendo-landing .feature-section { padding-top: 76px; padding-bottom: 122px; }
+
+body.nintendo-landing .feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 46px;
+}
+
+body.nintendo-landing .feature-card,
+body.nintendo-landing .callout-card,
+body.nintendo-landing .flow-step,
+body.nintendo-landing .sales-points article {
+  position: relative;
+  overflow: hidden;
+  color: var(--ink);
+  background: linear-gradient(145deg, #ffffff 0%, #dedede 54%, #c0d5e6 100%);
+  border: 2px solid var(--chrome);
+  border-radius: 0;
+  box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,.62);
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+body.nintendo-landing .feature-card::before,
+body.nintendo-landing .callout-card::before,
+body.nintendo-landing .flow-step::before,
+body.nintendo-landing .sales-points article::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 32px;
+  height: 2px;
+  background: var(--coral);
+  transform: rotate(45deg) translate(7px, -7px);
+  content: "";
+}
+
+body.nintendo-landing .feature-card:hover,
+body.nintendo-landing .callout-card:hover,
+body.nintendo-landing .flow-step:hover,
+body.nintendo-landing .sales-points article:hover {
+  filter: saturate(1.08);
+  transform: translateY(-5px);
+  box-shadow: 10px 12px 0 rgba(33,36,46,.42), inset 0 0 0 1px rgba(255,255,255,.7);
+}
+
+body.nintendo-landing .feature-card { min-height: 304px; padding: 25px 22px 20px; }
+body.nintendo-landing .feature-card::after { background: radial-gradient(circle, rgba(61,79,151,.18), transparent 70%); }
+
+body.nintendo-landing .feature-card.feature-main {
+  color: var(--white);
+  background:
+    radial-gradient(circle, rgba(90,95,140,.4) 1px, transparent 1.3px) 0 0 / 7px 7px,
+    linear-gradient(145deg, #3d4f97, #21242e);
+  border-color: var(--coral);
+}
+
+body.nintendo-landing .feature-card.feature-main p,
+body.nintendo-landing .feature-card.feature-main .feature-keyline { color: #c0d5e6; }
+
+body.nintendo-landing .feature-number,
+body.nintendo-landing .callout-no,
+body.nintendo-landing .flow-num { color: var(--coral); }
+
+body.nintendo-landing .feature-card.feature-main .feature-number { color: var(--amber); }
+
+body.nintendo-landing .feature-icon {
+  width: 54px;
+  height: 54px;
+  margin: 22px 0 17px;
+  color: var(--coral);
+  background: rgba(230,0,18,.1);
+  border: 2px solid var(--coral);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 rgba(33,36,46,.22);
+}
+
+body.nintendo-landing .feature-card.feature-main .feature-icon {
+  color: var(--amber);
+  background: rgba(236,171,55,.15);
+  border-color: var(--amber);
+}
+
+body.nintendo-landing .replay-icon span:last-child { color: var(--amber); }
+body.nintendo-landing .board-icon { color: var(--teal); background: rgba(32,100,121,.11); border-color: var(--teal); }
+body.nintendo-landing .csv-icon { color: var(--gold); background: rgba(228,134,0,.11); border-color: var(--gold); }
+body.nintendo-landing .import-icon { color: var(--coral); background: rgba(230,0,18,.1); border-color: var(--coral); }
+
+body.nintendo-landing .feature-card h3 { font-size: 18px; line-height: 1.35; }
+body.nintendo-landing .feature-card p { color: var(--muted); }
+body.nintendo-landing .feature-card.feature-main h3 { color: var(--white); }
+
+body.nintendo-landing .feature-keyline kbd,
+body.nintendo-landing .button-shot kbd {
+  min-width: 23px;
+  height: 22px;
+  color: var(--white);
+  background: var(--coral);
+  border: 1px solid #ffb5b8;
+  border-radius: 0;
+  box-shadow: 2px 2px 0 rgba(33,36,46,.3);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+body.nintendo-landing .feature-card.feature-main .feature-keyline kbd { background: var(--amber); color: var(--ink); }
+
+body.nintendo-landing .comparison-section { padding-top: 28px; padding-bottom: 122px; }
+
+body.nintendo-landing .comparison-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, .7fr);
+  gap: 18px;
+  align-items: stretch;
+  margin-top: 45px;
+}
+
+body.nintendo-landing .comparison-table-wrap {
+  min-width: 0;
+  padding: 16px;
+  background: rgba(255,255,255,.72);
+  border: 2px solid var(--chrome);
+  border-radius: 0;
+  box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,.75);
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+}
+
+body.nintendo-landing .comparison-table { min-width: 610px; color: var(--ink); }
+body.nintendo-landing .comparison-table th,
+body.nintendo-landing .comparison-table td { border-color: rgba(90,95,140,.35); }
+body.nintendo-landing .comparison-table thead th { color: var(--chrome); }
+body.nintendo-landing .comparison-table tbody th { color: var(--ink); }
+body.nintendo-landing .comparison-table td { color: var(--muted); }
+body.nintendo-landing .comparison-table th.ours,
+body.nintendo-landing .comparison-table td.ours { background: rgba(236,171,55,.2); border-color: rgba(228,134,0,.52); }
+body.nintendo-landing .comparison-table thead th.ours { color: var(--coral); }
+body.nintendo-landing .comparison-table td small { color: var(--muted); }
+body.nintendo-landing .mark.yes { color: var(--coral); }
+body.nintendo-landing .mark.partial { color: var(--gold); }
+body.nintendo-landing .mark.no { color: #737a95; }
+body.nintendo-landing .table-note { color: var(--muted); }
+
+body.nintendo-landing .sales-panel {
+  position: relative;
+  padding: 28px 26px 24px;
+  color: var(--white);
+  background:
+    radial-gradient(circle, rgba(90,95,140,.34) 1px, transparent 1.3px) 0 0 / 7px 7px,
+    linear-gradient(155deg, #3d4f97, #21242e 72%);
+  border: 2px solid var(--coral);
+  border-radius: 0;
+  box-shadow: var(--shadow);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+body.nintendo-landing .sales-panel::after { background: radial-gradient(circle, rgba(236,171,55,.3), transparent 68%); }
+body.nintendo-landing .sales-panel .kicker { color: var(--amber); }
+body.nintendo-landing .speech-mark { color: rgba(236,171,55,.78); }
+body.nintendo-landing .sales-panel h3 { color: var(--white); }
+body.nintendo-landing .sales-panel p:not(.kicker):not(.sales-strong) { color: #c0d5e6; }
+body.nintendo-landing .sales-panel .sales-strong { color: #fff1c7; background: rgba(230,0,18,.2); border-left-color: var(--coral); }
+body.nintendo-landing .sales-cta { display: inline-flex; color: var(--white); }
+
+body.nintendo-landing .sales-points { gap: 15px; }
+body.nintendo-landing .sales-points article { min-height: 148px; padding: 21px 19px; }
+body.nintendo-landing .sales-points article.answer { background: linear-gradient(145deg, #fff5d6, #ecab37); border-color: var(--gold); }
+body.nintendo-landing .sales-points span { color: var(--coral); }
+body.nintendo-landing .sales-points p { color: var(--muted); }
+body.nintendo-landing .sales-arrow { color: var(--coral); font-size: 28px; font-weight: 900; }
+
+body.nintendo-landing .tour-section { padding-top: 90px; padding-bottom: 122px; }
+body.nintendo-landing .annotated-stage {
+  position: relative;
+  margin-top: 48px;
+  padding: 42px 24px 24px;
+  background:
+    radial-gradient(circle, rgba(90,95,140,.3) 1px, transparent 1.3px) 0 0 / 8px 8px,
+    linear-gradient(145deg, #303442, #171a23);
+  border: 2px solid var(--platinum);
+  border-radius: 0;
+  box-shadow: 10px 10px 0 rgba(33,36,46,.46);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+
+body.nintendo-landing .stage-label { color: var(--amber); }
+
+body.nintendo-landing .mock-app {
+  position: relative;
+  overflow: hidden;
+  background: #21242e;
+  border: 2px solid var(--chrome);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 rgba(0,0,0,.4);
+}
+
+body.nintendo-landing .mock-subtitle { color: #5bd0b1; }
+body.nintendo-landing .mock-date { color: #c0d5e6; }
+body.nintendo-landing .mock-controls { background: #dedede; border-color: #5a5f8c; }
+body.nintendo-landing .mock-button,
+body.nintendo-landing .mock-select {
+  color: var(--ink);
+  background: linear-gradient(180deg, #fff, #c0d5e6);
+  border: 1px solid var(--chrome);
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 rgba(33,36,46,.24);
+}
+body.nintendo-landing .mock-button.import { color: var(--white); background: linear-gradient(180deg, #60619c, #3d4f97); border-color: var(--white); }
+body.nintendo-landing .mock-button.csv { color: var(--white); background: var(--teal); border-color: #d6f0f5; }
+body.nintendo-landing .mock-status { color: var(--teal); }
+body.nintendo-landing .mock-select { background: var(--white); }
+body.nintendo-landing .mock-button.enter { color: var(--chrome); }
+body.nintendo-landing .mock-button.mode { color: var(--white); background: var(--coral); border-color: #ffb5b8; }
+body.nintendo-landing .mock-button.key-button { color: var(--coral); }
+body.nintendo-landing .mock-button.key-button.wide { color: var(--gold); }
+body.nintendo-landing .mock-button.play { color: var(--coral); border-color: var(--coral); }
+body.nintendo-landing .mock-button.setting { color: var(--white); background: var(--chrome); border-color: var(--white); }
+body.nintendo-landing .mock-tools { color: #c0d5e6; background: #303442; border-color: #5a5f8c; }
+body.nintendo-landing .mock-tools > span:not(.tools-caption):not(.tool-hint) { border-color: #8ba1d4; border-radius: 2px; }
+body.nintendo-landing .mock-tools .tools-caption { color: var(--amber); }
+body.nintendo-landing .mock-tools .rr { color: var(--amber); }
+body.nintendo-landing .mock-tools .entry { color: #5bd0b1; }
+body.nintendo-landing .mock-tools .lc { color: #ff9a9f; }
+body.nintendo-landing .mock-tools .tp { color: #9fbee7; }
+body.nintendo-landing .mock-tools .tool-hint { color: #c0d5e6; }
+body.nintendo-landing .mock-workspace { background: #171a23; }
+body.nintendo-landing .mock-chart-panel,
+body.nintendo-landing .mock-board,
+body.nintendo-landing .mock-tape { background: #21242e; border-color: #5a5f8c; border-radius: 0; }
+body.nintendo-landing .mock-panel-head,
+body.nintendo-landing .side-head { border-color: #5a5f8c; }
+body.nintendo-landing .mock-panel-head strong,
+body.nintendo-landing .side-head strong { color: var(--white); }
+body.nintendo-landing .mock-panel-head span,
+body.nintendo-landing .side-head span,
+body.nintendo-landing .board-header { color: #c0d5e6; }
+body.nintendo-landing .chart-grid path { stroke: #5a5f8c; }
+body.nintendo-landing .chart-fill { fill: rgba(91,208,177,.13); }
+body.nintendo-landing .chart-price { stroke: #5bd0b1; filter: drop-shadow(0 0 3px rgba(91,208,177,.58)); }
+body.nintendo-landing .chart-vwap { stroke: #8ba1d4; }
+body.nintendo-landing .chart-entry-line { stroke: var(--amber); }
+body.nintendo-landing .chart-entry-dot { fill: var(--coral); stroke: #fff1c7; }
+body.nintendo-landing .chart-entry-label { fill: var(--amber); }
+body.nintendo-landing .chart-latest { fill: #5bd0b1; }
+body.nintendo-landing .volume-bars path { stroke: rgba(159,190,231,.45); }
+body.nintendo-landing .mock-slider { color: #c0d5e6; }
+body.nintendo-landing .slider-track { background: #5a5f8c; }
+body.nintendo-landing .slider-track::before,
+body.nintendo-landing .slider-track b { background: var(--coral); }
+body.nintendo-landing .slider-track b { border-color: #fff1c7; border-radius: 0; }
+body.nintendo-landing .board-line { color: #c0d5e6; border-color: #5a5f8c; }
+body.nintendo-landing .board-line b { color: var(--white); }
+body.nintendo-landing .board-line strong { color: var(--amber); }
+body.nintendo-landing .board-line.sell b { color: #ff9a9f; }
+body.nintendo-landing .board-line.buy b { color: #87dec6; }
+body.nintendo-landing .board-line.current { background: rgba(236,171,55,.22); border-color: var(--amber); }
+body.nintendo-landing .history-title { color: #ff9a9f; }
+body.nintendo-landing .board-line.history { background: rgba(167,40,43,.2); }
+body.nintendo-landing .board-line.history span { color: #ff9a9f; }
+body.nintendo-landing .tape-line { color: #c0d5e6; border-color: #5a5f8c; }
+body.nintendo-landing .tape-line b { color: var(--white); }
+body.nintendo-landing .tape-line strong { color: var(--amber); }
+body.nintendo-landing .tape-line.up b,
+body.nintendo-landing .tape-line.up strong { color: #5bd0b1; }
+body.nintendo-landing .tape-line.down b,
+body.nintendo-landing .tape-line.down strong { color: #ff9a9f; }
+
+body.nintendo-landing .marker {
+  color: var(--white);
+  background: var(--coral);
+  border: 3px solid #fff1c7;
+  border-radius: 0;
+  box-shadow: 0 0 0 2px var(--ink), 5px 5px 0 rgba(0,0,0,.42);
+  animation: markerBlink 2.6s ease-in-out infinite;
+}
+body.nintendo-landing .marker::after { background: var(--amber); }
+body.nintendo-landing .marker-2 { animation-delay: -.3s; }
+body.nintendo-landing .marker-3 { animation-delay: -.6s; }
+body.nintendo-landing .marker-4 { animation-delay: -.9s; }
+body.nintendo-landing .marker-5 { animation-delay: -1.2s; }
+body.nintendo-landing .marker-6 { animation-delay: -1.5s; }
+body.nintendo-landing .marker-7 { animation-delay: -1.8s; }
+body.nintendo-landing .marker-8 { animation-delay: -2.1s; }
+
+body.nintendo-landing .callout-grid { gap: 10px; margin-top: 16px; }
+body.nintendo-landing .callout-card { min-height: 240px; padding: 19px 16px 16px; }
+body.nintendo-landing .callout-card h3 { color: var(--ink); }
+body.nintendo-landing .callout-card p { color: var(--muted); }
+body.nintendo-landing .button-shot {
+  min-height: 42px;
+  margin-bottom: 17px;
+  padding: 5px 10px;
+  color: var(--white);
+  background: linear-gradient(180deg, #60619c, #3d4f97);
+  border: 2px solid var(--white);
+  border-radius: 2px;
+  box-shadow: 3px 3px 0 rgba(33,36,46,.3);
+  font-size: 10px;
+  font-weight: 900;
+}
+body.nintendo-landing .button-shot small { color: #c0d5e6; }
+body.nintendo-landing .button-shot.csv { color: var(--white); background: var(--teal); border-color: #d6f0f5; }
+body.nintendo-landing .button-shot.keys { color: var(--ink); background: #c0d5e6; border-color: var(--chrome); }
+body.nintendo-landing .button-shot.play { color: var(--white); background: var(--coral); border-color: #fff1c7; }
+body.nintendo-landing .button-shot.setting { color: var(--white); background: var(--chrome); border-color: #fff; }
+body.nintendo-landing .button-shot.chart-tools { background: #303442; border-color: #c0d5e6; }
+body.nintendo-landing .button-shot.chart-tools i { color: #fff; border-color: #8ba1d4; border-radius: 0; }
+body.nintendo-landing .button-shot.board-shot { color: var(--white); background: #303442; border-color: var(--amber); }
+body.nintendo-landing .button-shot.board-shot b { color: #87dec6; }
+body.nintendo-landing .button-shot.board-shot strong { color: var(--amber); }
+body.nintendo-landing .button-shot.board-shot span { color: #c0d5e6; }
+
+body.nintendo-landing .flow-section { padding-top: 30px; padding-bottom: 122px; }
+body.nintendo-landing .flow-line { margin-top: 52px; }
+body.nintendo-landing .flow-icon {
+  color: var(--coral);
+  background: rgba(230,0,18,.1);
+  border: 2px solid var(--coral);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 rgba(33,36,46,.22);
+}
+body.nintendo-landing .flow-step h3 { color: var(--ink); }
+body.nintendo-landing .flow-step p { color: var(--muted); }
+body.nintendo-landing .flow-arrow { color: var(--coral); font-weight: 900; }
+
+body.nintendo-landing .audience-section {
+  grid-template-columns: .8fr 1.2fr;
+  gap: 70px;
+  padding-top: 20px;
+  padding-bottom: 122px;
+}
+body.nintendo-landing .audience-copy h2 { font-size: clamp(32px, 4vw, 50px); line-height: 1.08; }
+body.nintendo-landing .text-link { color: var(--coral); font-size: 12px; font-weight: 900; }
+body.nintendo-landing .text-link:hover { color: var(--gold); }
+body.nintendo-landing .audience-list { border-color: rgba(90,95,140,.55); }
+body.nintendo-landing .audience-list > div { border-color: rgba(90,95,140,.55); }
+body.nintendo-landing .audience-list b { color: var(--coral); }
+body.nintendo-landing .audience-list strong { color: var(--ink); }
+body.nintendo-landing .audience-list span { color: var(--muted); }
+
+body.nintendo-landing .cta-section { padding-bottom: 54px; }
+body.nintendo-landing .cta-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 46px 50px;
+  color: var(--white);
+  background:
+    radial-gradient(circle, rgba(90,95,140,.36) 1px, transparent 1.3px) 0 0 / 7px 7px,
+    linear-gradient(120deg, #3d4f97, #21242e 74%);
+  border: 2px solid var(--amber);
+  border-radius: 0;
+  box-shadow: 9px 9px 0 rgba(33,36,46,.46);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+body.nintendo-landing .cta-panel .kicker { color: var(--amber); }
+body.nintendo-landing .cta-panel h2 { color: var(--white); text-shadow: 2px 2px 0 rgba(0,0,0,.26); }
+body.nintendo-landing .cta-panel p:not(.kicker) { color: #c0d5e6; }
+body.nintendo-landing .disclaimer { color: var(--muted); }
+
+body.nintendo-landing .promo-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 26px 0 36px;
+  color: #c0d5e6;
+  border-top: 3px solid var(--chrome);
+  font-size: 10px;
+}
+body.nintendo-landing .promo-footer .brand-mark { width: 30px; height: 26px; font-size: 10px; }
+body.nintendo-landing .promo-footer .brand strong { color: var(--white); font-size: 11px; }
+body.nintendo-landing .promo-footer .brand small { color: #c0d5e6; font-size: 7px; }
+body.nintendo-landing .footer-date { color: var(--amber); }
+
+body.nintendo-landing .mini-line,
+body.nintendo-landing .chart-price {
+  stroke-dasharray: 900;
+  stroke-dashoffset: 0;
+  animation: chartDraw 2.6s ease-out both;
+}
+
+@keyframes brandSignal {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-2px) rotate(1deg); }
+}
+
+@keyframes signalPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 4px rgba(230,0,18,.14); }
+  50% { opacity: .58; box-shadow: 0 0 0 8px rgba(230,0,18,0); }
+}
+
+@keyframes glowShift {
+  0%, 100% { transform: scale(.95); opacity: .72; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes consoleFloat {
+  0%, 100% { transform: perspective(1300px) rotateY(-5deg) rotateX(3deg) translateY(0); }
+  50% { transform: perspective(1300px) rotateY(-4deg) rotateX(2deg) translateY(-7px); }
+}
+
+@keyframes noteFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes markerBlink {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.18); }
+}
+
+@keyframes scanSweep {
+  0% { transform: translateY(-40%); opacity: 0; }
+  16% { opacity: 1; }
+  60% { opacity: .7; }
+  100% { transform: translateY(720%); opacity: 0; }
+}
+
+@keyframes chartDraw {
+  from { stroke-dashoffset: 900; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (max-width: 1080px) {
+  body.nintendo-landing .hero { grid-template-columns: 1fr; padding-top: 55px; }
+  body.nintendo-landing .hero-copy { max-width: 720px; }
+  body.nintendo-landing .hero-visual { min-height: 470px; }
+  body.nintendo-landing .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  body.nintendo-landing .callout-grid { grid-template-columns: repeat(2, 1fr); }
+  body.nintendo-landing .comparison-layout { grid-template-columns: 1fr; }
+  body.nintendo-landing .sales-points { grid-template-columns: 1fr auto 1fr; }
+  body.nintendo-landing .sales-points article:last-child { grid-column: 1 / -1; }
+  body.nintendo-landing .mock-workspace { grid-template-columns: 1.1fr .9fr; }
+}
+
+@media (max-width: 720px) {
+  body.nintendo-landing .section-shell { width: min(100% - 26px, 560px); }
+  body.nintendo-landing .promo-nav { padding: 10px 13px; }
+  body.nintendo-landing .nav-links a:not(.nav-cta) { display: none; }
+  body.nintendo-landing .nav-links { gap: 0; }
+  body.nintendo-landing .nav-cta { padding: 8px 12px; font-size: 10px; }
+  body.nintendo-landing .subnav-inner { width: min(100% - 26px, 560px); gap: 8px; }
+  body.nintendo-landing .subnav-label { font-size: 8px; }
+  body.nintendo-landing .subnav-inner nav { display: none; }
+  body.nintendo-landing .subnav-status { margin-left: auto; font-size: 8px; }
+  body.nintendo-landing .hero { min-height: 0; padding-top: 45px; padding-bottom: 56px; }
+  body.nintendo-landing .hero h1 { font-size: clamp(42px, 14vw, 62px); }
+  body.nintendo-landing .hero-lead { font-size: 13px; }
+  body.nintendo-landing .hero-visual { min-height: 335px; margin-top: 12px; }
+  body.nintendo-landing .mini-window { transform: none; animation: none; }
+  body.nintendo-landing .mini-content { grid-template-columns: 1.25fr .75fr; }
+  body.nintendo-landing .mini-chart svg { height: 175px; }
+  body.nintendo-landing .mini-board-head,
+  body.nintendo-landing .mini-row { font-size: 6px; }
+  body.nintendo-landing .mini-row { padding: 4px 5px; }
+  body.nintendo-landing .mini-board-head,
+  body.nintendo-landing .mini-history { padding-inline: 5px; }
+  body.nintendo-landing .floating-note { display: none; }
+  body.nintendo-landing .feature-section,
+  body.nintendo-landing .comparison-section,
+  body.nintendo-landing .tour-section,
+  body.nintendo-landing .flow-section,
+  body.nintendo-landing .audience-section { padding-bottom: 72px; }
+  body.nintendo-landing .feature-grid,
+  body.nintendo-landing .callout-grid { grid-template-columns: 1fr; }
+  body.nintendo-landing .feature-card { min-height: auto; }
+  body.nintendo-landing .feature-card p { min-height: 0; }
+  body.nintendo-landing .centered { text-align: left; }
+  body.nintendo-landing .centered .kicker { text-align: left; }
+  body.nintendo-landing .comparison-table-wrap { padding: 8px; }
+  body.nintendo-landing .sales-panel { padding: 24px 19px; }
+  body.nintendo-landing .sales-points { grid-template-columns: 1fr; }
+  body.nintendo-landing .sales-arrow { display: none; }
+  body.nintendo-landing .sales-points article:last-child { grid-column: auto; }
+  body.nintendo-landing .annotated-stage { padding: 34px 7px 7px; overflow: hidden; }
+  body.nintendo-landing .stage-label { left: 12px; }
+  body.nintendo-landing .mock-controls { gap: 4px; }
+  body.nintendo-landing .mock-button,
+  body.nintendo-landing .mock-select { padding-inline: 5px; font-size: 7px; }
+  body.nintendo-landing .mock-status,
+  body.nintendo-landing .mock-button.enter { display: none; }
+  body.nintendo-landing .mock-button.setting { margin-left: 0; }
+  body.nintendo-landing .mock-tools .tool-hint { display: none; }
+  body.nintendo-landing .mock-workspace { grid-template-columns: 1fr; }
+  body.nintendo-landing .mock-chart-area { height: 250px; }
+  body.nintendo-landing .mock-side { grid-template-rows: auto auto; }
+  body.nintendo-landing .mock-board { max-height: 265px; }
+  body.nintendo-landing .marker { display: none; }
+  body.nintendo-landing .callout-card { min-height: auto; }
+  body.nintendo-landing .flow-line { grid-template-columns: 1fr; gap: 9px; margin-top: 34px; }
+  body.nintendo-landing .flow-arrow { display: none; }
+  body.nintendo-landing .flow-step { min-height: 0; }
+  body.nintendo-landing .audience-section { grid-template-columns: 1fr; gap: 35px; }
+  body.nintendo-landing .cta-panel { align-items: flex-start; flex-direction: column; padding: 30px 24px; }
+  body.nintendo-landing .promo-footer { align-items: flex-start; flex-direction: column; width: min(100% - 26px, 560px); }
+  body.nintendo-landing .footer-date { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.nintendo-landing *,
+  body.nintendo-landing *::before,
+  body.nintendo-landing *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+@media print {
+  body.nintendo-landing::before,
+  body.nintendo-landing .promo-nav,
+  body.nintendo-landing .nintendo-subnav,
+  body.nintendo-landing .hero-actions,
+  body.nintendo-landing .nav-links,
+  body.nintendo-landing .button,
+  body.nintendo-landing .text-link { display: none !important; }
+  body.nintendo-landing { background: #fff; }
+  body.nintendo-landing .hero { min-height: auto; padding-top: 20px; }
+  body.nintendo-landing .hero,
+  body.nintendo-landing .feature-section,
+  body.nintendo-landing .comparison-section,
+  body.nintendo-landing .tour-section,
+  body.nintendo-landing .flow-section,
+  body.nintendo-landing .audience-section,
+  body.nintendo-landing .cta-section { padding-top: 36px; padding-bottom: 36px; }
+  body.nintendo-landing .annotated-stage,
+  body.nintendo-landing .cta-panel,
+  body.nintendo-landing .comparison-table-wrap { box-shadow: none; break-inside: avoid; }
+  body.nintendo-landing .feature-card,
+  body.nintendo-landing .callout-card,
+  body.nintendo-landing .flow-step { break-inside: avoid; }
+}

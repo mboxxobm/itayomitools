@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>板読みリプレイ | Trade Analysis Tool DEMO</title>
+  <link rel="stylesheet" href="styles.css?v=20260830-boardcount">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">TRADE ANALYSIS TOOL</p>
+        <h1>板読みリプレイ <span>Trade Analysis Tool / Browser DEMO</span></h1>
+        <p class="lead">2026/08/28の太陽誘電・任天堂を初期データとして、板・約定出来高・歩み値を同じTickで再生します。</p>
+        <p class="promo-link-wrap"><a class="promo-link" href="https://iyatomi.laggy.jp/boardreadtools/">商品紹介・比較・操作ガイドを見る ↗</a></p>
+      </div>
+      <div class="header-badge">Browser DEMO / 2026-08-28</div>
+    </header>
+
+    <section class="main-layout" id="mainLayout">
+      <section class="left-column">
+    <section class="control-panel panel">
+      <div class="controls-row" aria-label="検証操作">
+        <label class="file-button">
+          <span>GZIPを読み込む（複数可）</span>
+          <!-- macOS のネイティブ選択画面では複合拡張子（.jsonl.gz）の accept
+               が「読み込む」ボタンを無効にすることがあるため、候補を絞らず
+               選択後にアプリ側で JSONL/GZIP を判定する。 -->
+          <input id="fileInput" type="file" multiple>
+        </label>
+        <button id="demoReloadButton" type="button" class="demo-button">本日のDEMOを再読込</button>
+        <span id="demoInfo" class="demo-info">板読みデータを自動読込</span>
+        <label class="file-button csv-file-button">
+          <span>注文CSVでENTRY合図</span>
+          <input id="orderCsvInput" type="file" accept=".csv,text/csv">
+        </label>
+        <span id="orderCsvInfo" class="csv-info">CSV未読込</span>
+        <label class="field-label">銘柄
+          <select id="symbolSelect" disabled>
+            <option>GZIPを読み込んでください</option>
+          </select>
+        </label>
+        <label class="field-label">時間足
+          <select id="intervalSelect" disabled>
+            <option value="1000">1秒足</option>
+            <option value="5000">5秒足</option>
+            <option value="15000" selected>15秒足</option>
+            <option value="60000">1分足</option>
+          </select>
+        </label>
+        <button id="openIntervalModalButton" type="button" disabled>Enter 時間足入力</button>
+        <button id="verifyButton" type="button" class="active" disabled>検証モード</button>
+        <button id="prevButton" type="button" disabled title="Zで指定Tick数だけ戻る">Z 戻る</button>
+        <button id="nextButton" type="button" disabled title="Xで指定Tick数だけ進む">X 進む</button>
+        <button id="widePrevButton" type="button" disabled title="Aで指定Tick数の5倍戻る">A 5倍戻る</button>
+        <button id="wideNextButton" type="button" disabled title="Sで指定Tick数の5倍進む">S 5倍進む</button>
+        <label class="tick-field">Tick
+          <input id="tickStepInput" type="number" min="1" step="1" value="100" inputmode="numeric" disabled>
+        </label>
+        <button id="playButton" type="button" disabled title="指定Tick数ごとに自動で進める">▶ 再生</button>
+        <label class="field-label">板表示
+          <select id="boardDisplaySelect" disabled>
+            <option value="hypothesis" selected>実板10本＋仮説ゾーン</option>
+            <option value="live">現在10本のみ</option>
+          </select>
+        </label>
+        <label class="field-label">板レイアウト
+          <select id="boardLayoutSelect" disabled>
+            <option value="layout1">1：板型｜売件数・売数量・価格・買数量・買件数</option>
+            <option value="layout2">2：価格帯分析｜価格・約定出来高・約定件数・板数量・板件数</option>
+            <option value="layout3" selected>3：価格順統合｜高値→安値・価格帯出来高バー</option>
+            <option value="layout4">4：約定分析｜価格・約定出来高・約定件数・板数量・板件数</option>
+            <option value="layout5">5：チャート左側｜価格帯出来高オーバーレイ</option>
+          </select>
+        </label>
+        <label class="field-label">表示本数
+          <select id="boardDepthSelect" disabled>
+            <option value="20">20本</option>
+            <option value="40" selected>40本</option>
+            <option value="60">60本</option>
+            <option value="80">80本</option>
+          </select>
+        </label>
+        <button id="settingsButton" type="button" disabled>設定</button>
+        <button id="currentAnchorButton" type="button" class="active" disabled>現在中央固定: ON</button>
+        <label class="check-control"><input id="volumeProfileToggle" type="checkbox" checked disabled> <span id="volumeProfileToggleLabel">板内価格帯バー（B）</span></label>
+        <label class="check-control"><input id="chartProfileToggle" type="checkbox" checked disabled> <span id="chartProfileToggleLabel">チャート左側価格帯バー（V）</span></label>
+        <label class="check-control"><input id="flashToggle" type="checkbox" checked disabled> 約定フラッシュ</label>
+        <label class="check-control"><input id="cursorInfoToggle" type="checkbox" disabled> クロスライン</label>
+      </div>
+      <div class="controls-row drawing-toolbar" aria-label="チャート描画">
+        <span class="tool-caption">チャート</span>
+        <button id="horizontalTool" type="button" disabled>水平線</button>
+        <button id="rayTool" type="button" disabled>右向きレイ</button>
+        <button id="rrTool" type="button" disabled>RR計測</button>
+        <button id="entryTool" type="button" disabled>Entry</button>
+        <button id="lcTool" type="button" disabled>LC</button>
+        <button id="tpTool" type="button" disabled>TP</button>
+        <button id="arrowUpTool" type="button" disabled title="上矢印">↑</button>
+        <button id="arrowDownTool" type="button" disabled title="下矢印">↓</button>
+        <button id="eraseTool" type="button" disabled>線を消去</button>
+        <button id="clearLinesButton" type="button" disabled>全線消去</button>
+        <label class="color-control">線色 <input id="lineColor" type="color" value="#f4c95d" disabled></label>
+        <span id="drawingHint" class="drawing-hint">GZIPを読み込むと描画できます。</span>
+      </div>
+      <div class="status-row">
+        <div id="statusText" class="status-text" role="status">GZIP未読込</div>
+        <div id="progressText" class="progress-text"></div>
+      </div>
+      <div class="progress-track" aria-hidden="true"><div id="progressBar"></div></div>
+    </section>
+
+    <section class="summary-grid" aria-label="銘柄サマリー">
+      <div class="stat panel"><span>銘柄</span><strong id="statSymbol">-</strong></div>
+      <div class="stat panel"><span>時間足</span><strong id="statTimeframe">15秒足</strong></div>
+      <div class="stat panel"><span>Candles / Ticks</span><strong id="statPoints">-</strong></div>
+      <div class="stat panel"><span>現在時刻</span><strong id="statTime">-</strong></div>
+      <div class="stat panel"><span>現在値</span><strong id="statPrice">-</strong></div>
+      <div class="stat panel"><span>出来高</span><strong id="statVolume">-</strong></div>
+      <div class="stat panel"><span>VWAP</span><strong id="statVwap">-</strong></div>
+      <div class="stat panel"><span>始値</span><strong id="statOpen">-</strong></div>
+      <div class="stat panel"><span>高値 / 安値</span><strong id="statRange">-</strong></div>
+      <div class="stat panel"><span>呼値</span><strong id="statTickSize">-</strong></div>
+    </section>
+
+    <section class="chart-panel panel">
+      <div class="panel-heading">
+        <div>
+          <h2>価格チャート</h2>
+          <p id="chartHint">GZIPを読み込むと、検証カーソルまでの時間足を表示します。</p>
+        </div>
+        <span id="chartCursor" class="cursor-label">-</span>
+      </div>
+      <canvas id="priceChart" aria-label="価格チャート"></canvas>
+      <div class="timeline-row">
+        <span id="timelineStart">-</span>
+        <input id="timeSlider" type="range" min="0" max="0" value="0" disabled aria-label="検証カーソルのTick">
+        <span id="timelineEnd">-</span>
+      </div>
+      <div class="timeline-caption" id="timelineCaption">GZIPを読み込んでください</div>
+    </section>
+    </section>
+
+      <aside class="side-column" id="sideLayout">
+        <section class="board-panel panel">
+          <div class="panel-heading compact-heading">
+            <div>
+              <h2>板読み</h2>
+              <p id="boardMeta">-</p>
+              <p class="board-definition">約定件数＝成立回数 ｜ 板件数＝現在板の注文件数 ｜ 価格帯バー＝約定出来高の相対量</p>
+            </div>
+            <div class="quote-label" id="quoteLabel">最良売 - / 最良買 -</div>
+          </div>
+          <div class="book-wrap" id="bookWrap">
+            <div id="boardTopAnchorSpacer" class="board-anchor" aria-hidden="true"></div>
+            <div id="bookLayout2" class="book-layout book-layout-2">
+              <table class="book-table sell-table">
+                <thead><tr><th>価格</th><th title="現在Tickまでにその価格で成立した株数">約定出来高</th><th title="現在Tickまでにその価格で成立した回数">約定件数</th><th title="その時点で現在板に残っている数量">板数量</th><th title="その時点で現在板に残っている注文件数">板件数</th></tr></thead>
+                <tbody id="sellRows"></tbody>
+              </table>
+              <div class="current-row" id="currentRow"><span>現在</span><strong id="currentPrice">-</strong><span id="currentExecution" class="current-execution">約定 -</span><span id="currentTime">-</span></div>
+              <table class="book-table buy-table">
+                <thead><tr><th>価格</th><th title="現在Tickまでにその価格で成立した株数">約定出来高</th><th title="現在Tickまでにその価格で成立した回数">約定件数</th><th title="その時点で現在板に残っている数量">板数量</th><th title="その時点で現在板に残っている注文件数">板件数</th></tr></thead>
+                <tbody id="buyRows"></tbody>
+              </table>
+            </div>
+            <div id="bookLayout1" class="book-layout book-layout-1" hidden>
+              <table class="book-table layout1-table">
+                <thead><tr><th>売件数</th><th>売数量</th><th>価格</th><th>買数量</th><th>買件数</th></tr></thead>
+                <tbody id="layout1SellRows"></tbody>
+                <tbody>
+                  <tr class="current-row layout1-current-row" id="currentRowLayout1">
+                    <td colspan="5" class="layout1-current-cell"><span>現在</span><strong id="currentPriceLayout1">-</strong><span id="currentExecutionLayout1" class="current-execution">約定 -</span><span id="currentTimeLayout1">-</span></td>
+                  </tr>
+                </tbody>
+                <tbody id="layout1BuyRows"></tbody>
+              </table>
+            </div>
+            <div id="bookLayout3" class="book-layout book-layout-3" hidden>
+              <table class="book-table layout3-table">
+                <thead><tr><th>価格</th><th>状態</th><th title="現在Tickまでにその価格で成立した株数。価格帯出来高バーの長さにも反映">約定出来高</th><th title="現在Tickまでにその価格で成立した回数">約定件数</th><th title="その時点で現在板に残っている数量">板数量</th><th title="その時点で現在板に残っている注文件数">板件数</th></tr></thead>
+                <tbody id="layout3Rows"></tbody>
+              </table>
+            </div>
+            <div id="bookLayout4" class="book-layout book-layout-4" hidden>
+              <table class="book-table layout4-table">
+                <thead><tr><th>価格</th><th title="現在Tickまでにその価格で成立した株数">約定出来高</th><th title="現在Tickまでにその価格で成立した回数">約定件数</th><th title="その時点で現在板に残っている数量">板数量</th><th title="その時点で現在板に残っている注文件数">板件数</th><th>状態</th></tr></thead>
+                <tbody id="layout4Rows"></tbody>
+              </table>
+            </div>
+            <div id="boardBottomAnchorSpacer" class="board-anchor" aria-hidden="true"></div>
+          </div>
+        </section>
+
+        <section class="tape-panel panel">
+          <div class="panel-heading compact-heading">
+            <div><h2>歩み値</h2><p>現在のTickまでを時刻順に表示</p></div>
+            <span class="small-label" id="tapeCount">0件</span>
+          </div>
+          <div class="tape-scroll" id="tapeScroll">
+            <table class="tape-table">
+              <thead><tr><th>時刻</th><th>約定値</th><th>約定数量</th></tr></thead>
+              <tbody id="tapeRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <footer class="app-footer">
+      <span id="fileInfo">ファイル未選択</span>
+      <span>データは端末内で処理します。HTMLへの埋め込みは行いません。</span>
+    </footer>
+  </main>
+
+  <div id="intervalModalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <section class="modal panel" role="dialog" aria-modal="true" aria-labelledby="intervalModalTitle">
+      <h2 id="intervalModalTitle">時間足を入力</h2>
+      <p><code>15S</code>（15秒）、<code>30S</code>（30秒）、<code>1</code>（1分）、<code>2</code>（2分）、<code>30</code>（30分）、<code>D</code>（日足）を入力してEnterで適用します。</p>
+      <input id="intervalModalInput" type="text" autocomplete="off" placeholder="例: 15S / 1 / 30 / D">
+      <div class="modal-actions"><button id="intervalModalCancel" type="button">キャンセル</button><button id="intervalModalApply" type="button" class="primary">適用</button></div>
+    </section>
+  </div>
+
+  <div id="settingsModalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <section class="modal panel settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+      <h2 id="settingsModalTitle">表示設定</h2>
+      <label>板表示<select id="settingsBoardDisplaySelect"><option value="hypothesis">実板10本＋仮説ゾーン</option><option value="live">現在10本のみ</option></select></label>
+      <label>板レイアウト<select id="settingsBoardLayoutSelect"><option value="layout1">1：板型｜売件数・売数量・価格・買数量・買件数</option><option value="layout2">2：価格帯分析｜価格・約定出来高・約定件数・板数量・板件数</option><option value="layout3">3：価格順統合｜高値→安値・価格帯出来高バー</option><option value="layout4">4：約定分析｜価格・約定出来高・約定件数・板数量・板件数</option><option value="layout5">5：チャート左側｜価格帯出来高オーバーレイ</option></select></label>
+      <label>表示本数<select id="settingsBoardDepthSelect"><option value="20">20本</option><option value="40">40本</option><option value="60">60本</option><option value="80">80本</option></select></label>
+      <label class="check-control settings-check-control"><input id="settingsVolumeProfileToggle" type="checkbox" checked> 板内価格帯出来高バー</label>
+      <label class="check-control settings-check-control"><input id="settingsChartProfileToggle" type="checkbox" checked> レイアウト5 チャート側価格帯出来高バー</label>
+      <label>板内バー切替キー（1文字）<input id="settingsVolumeProfileShortcutInput" type="text" maxlength="1" value="B" inputmode="latin" autocomplete="off" placeholder="B"></label>
+      <label>チャート左側バー切替キー（1文字）<input id="settingsChartProfileShortcutInput" type="text" maxlength="1" value="V" inputmode="latin" autocomplete="off" placeholder="V"></label>
+      <label>板内バー色<input id="settingsVolumeProfileColorInput" type="color" value="#f4c95d"></label>
+      <label>板内バー透過率（高いほど薄い）<output id="settingsVolumeProfileTransparencyValue">55%</output><input id="settingsVolumeProfileTransparencyRange" type="range" min="0" max="100" value="55"></label>
+      <label>チャート側バー色<input id="settingsChartProfileColorInput" type="color" value="#b7b16d"></label>
+      <label>チャート側バー透過率（高いほど薄い）<output id="settingsChartProfileTransparencyValue">55%</output><input id="settingsChartProfileTransparencyRange" type="range" min="0" max="100" value="55"></label>
+      <label>現在中央固定<select id="settingsCurrentAnchorSelect"><option value="fixed">固定</option><option value="scroll">通常スクロール</option></select></label>
+      <label>価格軸の追随<select id="settingsPriceFollowSelect"><option value="follow">価格に追随（標準）</option><option value="fixed">追随しない（固定）</option></select></label>
+      <label>マウス・クロスライン<select id="settingsCrosshairSelect"><option value="on">表示（標準）</option><option value="off">非表示</option></select></label>
+      <label>時間軸ズームの基準<select id="settingsTimeZoomSelect"><option value="latest">最新価格を右端（標準）</option><option value="mouse">マウス位置を基準</option></select></label>
+      <label>上部コントロール表示<select id="settingsCompactUiSelect"><option value="compact">コンパクト（標準）</option><option value="normal">標準</option></select></label>
+      <label>水平線の標準色<input id="settingsHorizontalColorInput" type="color" value="#f4c95d"></label>
+      <label>レイラインの標準色<input id="settingsRayColorInput" type="color" value="#65d6ff"></label>
+      <label>呼値テーブル<select id="settingsTickTableSelect"><option value="auto">自動（登録済み／観測値）</option><option value="topix500">TOPIX500</option><option value="etf1">ETF等（1口）</option><option value="other">その他の内国株</option></select></label>
+      <label>仮説板の保持時間<select id="settingsHypothesisAgeSelect"><option value="60000">1分</option><option value="180000" selected>3分</option><option value="300000">5分</option></select></label>
+      <label>板・歩み値表示高さ <output id="boardHeightValue">92%</output><input id="boardHeightRange" type="range" min="48" max="100" value="92"></label>
+      <label class="check-control"><input id="settingsFlashToggle" type="checkbox" checked> 大きな約定をフラッシュ</label>
+      <p class="modal-note">チャート側バーをONにすると、現在表示している価格チャートの左側へ価格軸に沿った価格帯別約定出来高を重ねて表示します。レイアウト5は板側も価格順表示に揃えて確認するためのパターンです。ショートカットは英数字1文字で設定できます（Z／X／A／Sはリプレイ操作用）。仮説ゾーンは観測済みの板からの推定です。取消・更新を保証するものではありません。透過率は0%が濃く、100%が完全に透明です。</p>
+      <div class="modal-actions"><button id="settingsCloseButton" type="button">キャンセル</button><button id="settingsApplyButton" type="button" class="primary">適用</button></div>
+    </section>
+  </div>
+  <script src="app.js?v=20260830-boardcount" defer></script>
+</body>
+</html>
