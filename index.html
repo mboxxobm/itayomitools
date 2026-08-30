@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>板読みリプレイ | Trade Analysis Tool DEMO</title>
-  <link rel="stylesheet" href="styles.css?v=20260830-boardcount">
+  <link rel="stylesheet" href="styles.css?v=20260830-boardcount-settings">
 </head>
 <body>
   <main class="app-shell">
@@ -229,6 +229,7 @@
       <label>板表示<select id="settingsBoardDisplaySelect"><option value="hypothesis">実板10本＋仮説ゾーン</option><option value="live">現在10本のみ</option></select></label>
       <label>板レイアウト<select id="settingsBoardLayoutSelect"><option value="layout1">1：板型｜売件数・売数量・価格・買数量・買件数</option><option value="layout2">2：価格帯分析｜価格・約定出来高・約定件数・板数量・板件数</option><option value="layout3">3：価格順統合｜高値→安値・価格帯出来高バー</option><option value="layout4">4：約定分析｜価格・約定出来高・約定件数・板数量・板件数</option><option value="layout5">5：チャート左側｜価格帯出来高オーバーレイ</option></select></label>
       <label>表示本数<select id="settingsBoardDepthSelect"><option value="20">20本</option><option value="40">40本</option><option value="60">60本</option><option value="80">80本</option></select></label>
+      <label>板件数列<select id="settingsBoardOrderCountMode"><option value="auto">自動（元データにある時だけ表示）</option><option value="show">常に表示</option><option value="hide">常に非表示</option></select></label>
       <label class="check-control settings-check-control"><input id="settingsVolumeProfileToggle" type="checkbox" checked> 板内価格帯出来高バー</label>
       <label class="check-control settings-check-control"><input id="settingsChartProfileToggle" type="checkbox" checked> レイアウト5 チャート側価格帯出来高バー</label>
       <label>板内バー切替キー（1文字）<input id="settingsVolumeProfileShortcutInput" type="text" maxlength="1" value="B" inputmode="latin" autocomplete="off" placeholder="B"></label>
@@ -248,10 +249,10 @@
       <label>仮説板の保持時間<select id="settingsHypothesisAgeSelect"><option value="60000">1分</option><option value="180000" selected>3分</option><option value="300000">5分</option></select></label>
       <label>板・歩み値表示高さ <output id="boardHeightValue">92%</output><input id="boardHeightRange" type="range" min="48" max="100" value="92"></label>
       <label class="check-control"><input id="settingsFlashToggle" type="checkbox" checked> 大きな約定をフラッシュ</label>
-      <p class="modal-note">チャート側バーをONにすると、現在表示している価格チャートの左側へ価格軸に沿った価格帯別約定出来高を重ねて表示します。レイアウト5は板側も価格順表示に揃えて確認するためのパターンです。ショートカットは英数字1文字で設定できます（Z／X／A／Sはリプレイ操作用）。仮説ゾーンは観測済みの板からの推定です。取消・更新を保証するものではありません。透過率は0%が濃く、100%が完全に透明です。</p>
+      <p class="modal-note">板件数列は「自動」にすると、元データに正確な注文件数がある時だけ表示します。KabuステーションAPIの通常ログでは板件数が収録されないため、自動では列を隠します。チャート側バーをONにすると、現在表示している価格チャートの左側へ価格軸に沿った価格帯別約定出来高を重ねて表示します。レイアウト5は板側も価格順表示に揃えて確認するためのパターンです。ショートカットは英数字1文字で設定できます（Z／X／A／Sはリプレイ操作用）。仮説ゾーンは観測済みの板からの推定です。取消・更新を保証するものではありません。透過率は0%が濃く、100%が完全に透明です。</p>
       <div class="modal-actions"><button id="settingsCloseButton" type="button">キャンセル</button><button id="settingsApplyButton" type="button" class="primary">適用</button></div>
     </section>
   </div>
-  <script src="app.js?v=20260830-boardcount" defer></script>
+  <script src="app.js?v=20260830-boardcount-settings" defer></script>
 </body>
 </html>

@@ -64,6 +64,7 @@
     timelineEnd: $("#timelineEnd"),
     timelineCaption: $("#timelineCaption"),
     boardMeta: $("#boardMeta"),
+    boardPanel: $(".board-panel"),
     quoteLabel: $("#quoteLabel"),
     bookWrap: $("#bookWrap"),
     boardTopAnchorSpacer: $("#boardTopAnchorSpacer"),
@@ -99,6 +100,7 @@
     settingsBoardDisplaySelect: $("#settingsBoardDisplaySelect"),
     settingsBoardLayoutSelect: $("#settingsBoardLayoutSelect"),
     settingsBoardDepthSelect: $("#settingsBoardDepthSelect"),
+    settingsBoardOrderCountMode: $("#settingsBoardOrderCountMode"),
     settingsCurrentAnchorSelect: $("#settingsCurrentAnchorSelect"),
     settingsPriceFollowSelect: $("#settingsPriceFollowSelect"),
     settingsCrosshairSelect: $("#settingsCrosshairSelect"),
@@ -132,6 +134,7 @@
   const STORAGE = {
     boardDisplay: "boardreadtools.board-display.v2",
     boardLayout: "boardreadtools.board-layout.v2",
+    boardOrderCountMode: "boardreadtools.board-order-count-mode.v1",
     volumeProfile: "boardreadtools.volume-profile.v1",
     volumeProfileShortcut: "boardreadtools.volume-profile-shortcut.v1",
     volumeProfileColor: "boardreadtools.volume-profile-color.v1",
@@ -224,6 +227,7 @@
     orderCsvFileName: "",
     boardDisplayMode: safeGet(STORAGE.boardDisplay, "hypothesis") === "live" ? "live" : "hypothesis",
     boardLayout: validBoardLayout(safeGet(STORAGE.boardLayout, "layout3")),
+    boardOrderCountMode: validBoardOrderCountMode(safeGet(STORAGE.boardOrderCountMode, "auto")),
     boardDepth: validDepth(Number(safeGet(STORAGE.boardDepth, "40"))),
     currentAnchorMode: safeGet(STORAGE.currentAnchor, "true") !== "false",
     hypothesisAgeMs: validHypothesisAge(Number(safeGet(STORAGE.hypothesisAge, "180000"))),
@@ -311,6 +315,10 @@
 
   function validBoardLayout(value) {
     return ["layout1", "layout2", "layout3", "layout4", "layout5"].includes(value) ? value : "layout3";
+  }
+
+  function validBoardOrderCountMode(value) {
+    return ["auto", "show", "hide"].includes(value) ? value : "auto";
   }
 
   function validHypothesisAge(value) {
@@ -1765,6 +1773,24 @@
     return "現在Tickまでの約定件数なし";
   }
 
+  function hasBoardOrderCount(row) {
+    return row?.orderCount !== null
+      && row?.orderCount !== undefined
+      && Number.isFinite(Number(row.orderCount));
+  }
+
+  function updateBoardOrderCountVisibility(liveRows = []) {
+    const hasSourceCounts = liveRows.some((row) => hasBoardOrderCount(row));
+    const visible = state.boardOrderCountMode === "show"
+      || (state.boardOrderCountMode === "auto" && hasSourceCounts);
+    els.bookWrap?.classList.toggle("board-counts-hidden", !visible);
+    if (els.boardPanel) {
+      els.boardPanel.dataset.boardOrderCountMode = state.boardOrderCountMode;
+      els.boardPanel.dataset.boardOrderCountAvailable = hasSourceCounts ? "true" : "false";
+    }
+    return { visible, hasSourceCounts };
+  }
+
   function orderCountText(row) {
     return row.orderCount === null || row.orderCount === undefined ? "-" : formatNumber(row.orderCount);
   }
@@ -2115,6 +2141,7 @@
     }
     const live = snapshot ? normalizeLiveBoard(snapshot, tick.p) : { sell: [], buy: [] };
     const liveRows = [...live.sell, ...live.buy];
+    const boardOrderCountState = updateBoardOrderCountVisibility(liveRows);
     const hypothesis = snapshot ? getHypothesisRows(data, snapshotIndex, liveRows, tick.p) : { sell: [], buy: [] };
     const occupiedPrices = new Set([...liveRows, ...hypothesis.sell, ...hypothesis.buy].map((row) => Number(row.price)));
     const history = getExecutionHistoryRows(data, state.cursorIndex, tick.p, occupiedPrices);
@@ -2157,10 +2184,16 @@
     const linkedLabel = linkedMarkers.length ? ` | 連動 ${linkedMarkers.map((marker) => `${marker.label} ${formatPrice(marker.price, data)}`).join(" / ")}` : "";
     const boardLabel = state.boardDisplayMode === "hypothesis" ? "実板10本＋仮説ゾーン" : "現在10本";
     const snapshotLabel = snapshot ? formatDateTime(snapshot.t) : "板スナップショットなし";
-    const boardCountRows = liveRows.filter((row) => row.orderCount !== null && row.orderCount !== undefined).length;
-    const boardCountLabel = boardCountRows
+    const boardCountRows = liveRows.filter(hasBoardOrderCount).length;
+    const boardCountLabel = boardOrderCountState.visible && boardCountRows
       ? `板件数 ${formatNumber(boardCountRows)}/${formatNumber(liveRows.length)}本収録`
-      : "板件数：元データ未収録";
+      : state.boardOrderCountMode === "hide"
+        ? "板件数列：非表示"
+        : state.boardOrderCountMode === "show"
+          ? "板件数：元データ未収録"
+        : boardOrderCountState.hasSourceCounts
+          ? "板件数列：自動表示"
+          : "板件数列：未収録のため非表示";
     els.boardMeta.textContent = `${data.name} | ${boardLabel}＋価格別約定履歴 ${formatNumber(history.sell.length + history.buy.length)}価格 | ${boardCountLabel} | ${snapshotLabel}${linkedLabel}`;
     els.quoteLabel.textContent = `呼値 ${formatNumber(tickSize, tickDigits(tickSize))}円 (${TICK_TABLE_LABELS[data.tickTable]}) / 最良売 ${formatPrice(bestSell)} / 最良買 ${formatPrice(bestBuy)}${quoteGap === null ? "" : ` / 気配差 ${formatPrice(quoteGap)}`}`;
     scheduleCurrentAnchor();
@@ -2404,6 +2437,7 @@
     applyBoardLayout();
     els.boardDepthSelect.value = String(state.boardDepth);
     els.settingsBoardLayoutSelect.value = state.boardLayout;
+    els.settingsBoardOrderCountMode.value = state.boardOrderCountMode;
     els.volumeProfileToggle.checked = state.volumeProfileEnabled;
     els.chartProfileToggle.checked = state.chartProfileEnabled;
     els.settingsVolumeProfileShortcutInput.value = state.volumeProfileShortcut;
@@ -2535,6 +2569,7 @@
     els.settingsBoardDisplaySelect.value = state.boardDisplayMode;
     els.settingsBoardLayoutSelect.value = state.boardLayout;
     els.settingsBoardDepthSelect.value = String(state.boardDepth);
+    els.settingsBoardOrderCountMode.value = state.boardOrderCountMode;
     els.settingsVolumeProfileToggle.checked = state.volumeProfileEnabled;
     els.settingsChartProfileToggle.checked = state.chartProfileEnabled;
     els.settingsVolumeProfileShortcutInput.value = state.volumeProfileShortcut;
@@ -2570,6 +2605,7 @@
     state.boardDisplayMode = els.settingsBoardDisplaySelect.value === "live" ? "live" : "hypothesis";
     state.boardLayout = validBoardLayout(els.settingsBoardLayoutSelect.value);
     state.boardDepth = validDepth(Number(els.settingsBoardDepthSelect.value));
+    state.boardOrderCountMode = validBoardOrderCountMode(els.settingsBoardOrderCountMode.value);
     state.volumeProfileEnabled = els.settingsVolumeProfileToggle.checked;
     state.chartProfileEnabled = els.settingsChartProfileToggle.checked;
     state.volumeProfileShortcut = shortcutInputValue(els.settingsVolumeProfileShortcutInput, state.volumeProfileShortcut);
@@ -2597,6 +2633,7 @@
     state.flashEnabled = els.settingsFlashToggle.checked;
     safeSet(STORAGE.boardDisplay, state.boardDisplayMode);
     safeSet(STORAGE.boardLayout, state.boardLayout);
+    safeSet(STORAGE.boardOrderCountMode, state.boardOrderCountMode);
     safeSet(STORAGE.boardDepth, state.boardDepth);
     safeSet(STORAGE.volumeProfile, state.volumeProfileEnabled);
     safeSet(STORAGE.volumeProfileShortcut, state.volumeProfileShortcut);
@@ -2656,6 +2693,7 @@
     els.boardMeta.textContent = "-";
     els.quoteLabel.textContent = "最良売 - / 最良買 -";
     els.tapeCount.textContent = "0件";
+    updateBoardOrderCountVisibility([]);
     state.renderContext = null;
     const canvas = els.chart;
     const rect = canvas.getBoundingClientRect();
