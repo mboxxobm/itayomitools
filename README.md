@@ -14,7 +14,7 @@
 
 日誌のENTRY価格 **8,948円** と板画像の現在値 **8,940円** は、約定時刻「09:15:00」が分単位で記録され、板画像には最も近い観測データが使われたため、完全に同じ瞬間の価格ではありません。
 
-▶ **[板読み解説ページを開く](https://github.com/mboxxobm/itayomitools/blob/master/itayomi.html)**
+▶ **[板読み解説ページを開く（スマホ対応）](https://htmlpreview.github.io/?https://raw.githubusercontent.com/mboxxobm/itayomitools/master/itayomi.html)**
 
 参考：[日本取引所グループ：リアルタイム情報](https://www.jpx.co.jp/markets/paid-info-equities/realtime/)
 
