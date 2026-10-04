@@ -61,12 +61,16 @@
     .step:nth-child(2) b { color: var(--blue); }
     .step:nth-child(3) b { color: var(--green); }
     .arrow { color: #8a98aa; text-align: center; font-size: 1.2rem; }
-    .orderbook { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
-    .side { overflow: hidden; border: 1px solid var(--line); border-radius: 14px; }
-    .side h3 { margin: 0; padding: 9px 14px; font-size: .95rem; }
-    .sell h3 { color: var(--red); background: var(--red-soft); }
-    .buy h3 { color: var(--green); background: var(--green-soft); }
-    .side p { margin: 0; padding: 14px; font-size: .95rem; }
+    .orderbook-wrap { overflow: hidden; margin: 18px 0 8px; border: 1px solid var(--line); border-radius: 14px; }
+    .orderbook { width: 100%; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums; }
+    .orderbook caption { padding: 11px 14px; color: var(--muted); background: #f8fafc; font-size: .85rem; text-align: left; }
+    .orderbook th, .orderbook td { width: 33.333%; padding: 9px 14px; border-bottom: 1px solid var(--line); text-align: right; }
+    .orderbook thead th { color: #47566b; background: #edf1f6; font-size: .87rem; }
+    .orderbook thead th:nth-child(2), .orderbook td:nth-child(2) { text-align: center; }
+    .orderbook .sell-row { color: var(--red); background: var(--red-soft); }
+    .orderbook .buy-row { color: var(--green); background: var(--green-soft); }
+    .orderbook .divider td { padding: 8px; color: #47566b; background: #f3f6fa; font-size: .82rem; font-weight: 700; text-align: center; }
+    .orderbook-note { color: var(--muted); font-size: .85rem; }
     .stat { display: inline-block; margin: 0 3px; padding: 2px 9px; border-radius: 999px; background: var(--gold-soft); color: var(--gold); font-weight: 800; font-variant-numeric: tabular-nums; }
     .callout { padding: 16px 18px; border-left: 4px solid var(--blue); border-radius: 8px; background: var(--blue-soft); }
     .callout p { margin: 0; }
@@ -122,11 +126,23 @@
 
       <section>
         <h2><span class="num">2</span>「−52.3%」は何を表している？</h2>
-        <p>今回の表示では、<span class="stat">−52.3%</span>は「上側の売り注文が、下側の買い注文より多い」という板の見た目の偏りを表しています。</p>
-        <div class="orderbook" aria-label="売り板と買い板のイメージ">
-          <div class="side sell"><h3>上側：売り注文</h3><p>売り数量が多く見える<br><strong>売り板が厚い状態</strong></p></div>
-          <div class="side buy"><h3>下側：買い注文</h3><p>売り側と比べて<br><strong>買い数量が少なく見える状態</strong></p></div>
+        <p>今回の表示では、<span class="stat">−52.3%</span>は「売り数量が買い数量より多い」という板の偏りを表しています。一般的な板画面では、売り注文が上段、買い注文が下段に並び、売数量は左、価格は中央、買数量は右に表示されます。</p>
+        <div class="orderbook-wrap">
+          <table class="orderbook" aria-label="上段に売り注文、下段に買い注文を置いた板のイメージ">
+            <caption>板の見方（イメージ）</caption>
+            <thead><tr><th scope="col">売数量</th><th scope="col">価格</th><th scope="col">買数量</th></tr></thead>
+            <tbody>
+              <tr class="sell-row"><td>売り数量</td><td>売り気配値</td><td>—</td></tr>
+              <tr class="sell-row"><td>売り数量</td><td>売り気配値</td><td>—</td></tr>
+              <tr class="divider"><td colspan="3">売り注文（上段）</td></tr>
+              <tr class="divider"><td colspan="3">売買の境目</td></tr>
+              <tr class="buy-row"><td>—</td><td>買い気配値</td><td>買い数量</td></tr>
+              <tr class="buy-row"><td>—</td><td>買い気配値</td><td>買い数量</td></tr>
+            </tbody>
+          </table>
         </div>
+        <p class="orderbook-note">※ 配置を説明する図です。実際の価格・数量は示していません。</p>
+        <p>「上側／下側」は注文が並ぶ位置の説明です。数量の多い・少ないは、左の売数量と右の買数量を比べています。</p>
         <div class="callout"><p><strong>これは板の表示時点の比較です。</strong>その後に注文が取消・追加されたり、約定が進んだりすれば状況は変わります。数値だけを見て「価格が下がる」と決めつけることはできません。</p></div>
       </section>
 
